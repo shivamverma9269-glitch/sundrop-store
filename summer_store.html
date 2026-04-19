@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SunDrop Store – Caps, Accessories & Shoes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sun: #FF6B00;
+    --sand: #FFF3E0;
+    --sky: #0A2540;
+    --mint: #00C9A7;
+    --cream: #FFFDF7;
+    --warm: #FF9A3C;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--sky);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 18px; height: 18px;
+    background: var(--sun);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: multiply;
+  }
+  .cursor.hovered { width: 40px; height: 40px; background: var(--mint); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(255,253,247,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,107,0,0.12);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: var(--sky);
+  }
+  .logo span { color: var(--sun); }
+  nav ul { list-style: none; display: flex; gap: 2.5rem; }
+  nav ul a {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--sky);
+    letter-spacing: 0.5px;
+    position: relative;
+  }
+  nav ul a::after {
+    content: '';
+    position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 2px;
+    background: var(--sun);
+    transition: width 0.3s ease;
+  }
+  nav ul a:hover::after { width: 100%; }
+  .nav-cart {
+    background: var(--sun);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cart:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,0,0.4); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 3rem 5rem 5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--sky);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    width: fit-content;
+    animation: slideIn 0.8s ease both;
+  }
+  .hero-tag .dot { width: 6px; height: 6px; background: var(--mint); border-radius: 50%; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 7vw, 7rem);
+    line-height: 0.92;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    animation: slideIn 0.8s 0.1s ease both;
+  }
+  .hero h1 .highlight {
+    color: var(--sun);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+  }
+  .hero p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #555;
+    max-width: 400px;
+    margin-bottom: 2.5rem;
+    animation: slideIn 0.8s 0.2s ease both;
+  }
+  .hero-btns { display: flex; gap: 1rem; animation: slideIn 0.8s 0.3s ease both; }
+  .btn-primary {
+    background: var(--sun);
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255,107,0,0.4); }
+  .btn-outline {
+    background: transparent;
+    color: var(--sky);
+    border: 2px solid var(--sky);
+    padding: 1rem 2rem;
+    border-radius: 100px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: none;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-outline:hover { background: var(--sky); color: white; }
+
+  .hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3rem;
+    animation: slideIn 0.8s 0.4s ease both;
+  }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--sun); }
+  .stat-label { font-size: 0.78rem; color: #888; letter-spacing: 0.5px; }
+
+  .hero-right {
+    background: linear-gradient(135deg, #FF6B00 0%, #FF9A3C 40%, #FFD08A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    top: -100px; right: -100px;
+  }
+  .hero-emoji-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding: 3rem;
+    z-index: 2;
+  }
+  .product-card-hero {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    transition: transform 0.3s;
+    cursor: none;
+  }
+  .product-card-hero:hover { transform: translateY(-8px) rotate(-1deg); }
+  .product-card-hero .emoji { font-size: 3.5rem; margin-bottom: 0.8rem; display: block; }
+  .product-card-hero h3 { font-size: 0.85rem; font-weight: 700; color: var(--sky); }
+  .product-card-hero .price { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--sun); }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--sky);
+    padding: 1rem 0;
+    overflow: hidden;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 18s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .marquee-item .dot { color: var(--sun); font-size: 1.5rem; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* CATEGORIES */
+  .section { padding: 6rem 5rem; }
+  .section-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--sun);
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 3rem;
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .cat-card {
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    cursor: none;
+    min-height: 320px;
+    display: flex;
+    align-items: flex-end;
+    transition: transform 0.4s;
+  }
+  .cat-card:hover { transform: scale(1.02); }
+  .cat-card.caps { background: linear-gradient(160deg, #0A2540 60%, #1a3a5c); }
+  .cat-card.accessories { background: linear-gradient(160deg, #FF6B00, #FF9A3C); }
+  .cat-card.shoes { background: linear-gradient(160deg, #00C9A7, #0A2540); }
+  .cat-emoji {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -60%);
+    font-size: 6rem;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
+    transition: transform 0.4s;
+  }
+  .cat-card:hover .cat-emoji { transform: translate(-50%, -65%) scale(1.1); }
+  .cat-info {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    color: white;
+    width: 100%;
+  }
+  .cat-info h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 1px; }
+  .cat-info p { font-size: 0.85rem; opacity: 0.8; margin-top: 0.2rem; }
+  .cat-arrow {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .cat-card:hover .cat-arrow { background: var(--sun); transform: rotate(45deg); }
+
+  /* PRODUCTS */
+  .products-section { background: white; }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+  .product-card {
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--cream);
+    cursor: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+  .product-card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(0,0,0,0.1); }
+  .product-img {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-img.bg1 { background: linear-gradient(135deg, #FFE0CC, #FFCBA0); }
+  .product-img.bg2 { background: linear-gradient(135deg, #CCF5EE, #A0EEE0); }
+  .product-img.bg3 { background: linear-gradient(135deg, #CCE0FF, #A0C8FF); }
+  .product-img.bg4 { background: linear-gradient(135deg, #FFD6CC, #FFC0A0); }
+  .product-img.bg5 { background: linear-gradient(135deg, #E0CCFF, #C8A0FF); }
+  .product-img.bg6 { background: linear-gradient(135deg, #FFFACC, #FFF0A0); }
+  .product-img.bg7 { background: linear-gradient(135deg, #CCFFE0, #A0FFB8); }
+  .product-img.bg8 { background: linear-gradient(135deg, #FFE8CC, #FFD0A0); }
+
+  .badge {
+    position: absolute;
+    top: 1rem; left: 1rem;
+    background: var(--sun);
+    color: white;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.25rem 0.7rem;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+  }
+  .badge.new { background: var(--mint); }
+  .product-body { padding: 1.2rem; }
+  .product-body h4 { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .product-body .sub { font-size: 0.78rem; color: #888; margin-bottom: 0.8rem; }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--sky); }
+  .product-price .old { font-size: 0.9rem; color: #aaa; text-decoration: line-through; margin-right: 0.3rem; font-family: 'DM Sans', sans-serif; font-weight: 400; }
+  .add-btn {
+    width: 36px; height: 36px;
+    background: var(--sky);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .add-btn:hover { background: var(--sun); transform: scale(1.15); }
+
+  /* PROMO BANNER */
+  .promo {
+    margin: 0 5rem;
+    border-radius: 28px;
+    background: linear-gradient(120deg, var(--sky) 50%, #1a3a5c);
+    padding: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    position: relative;
+  }
+  .promo::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(255,107,0,0.12);
+    right: -100px; top: -100px;
+  }
+  .promo-left h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: white;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .promo-left h2 span { color: var(--warm); }
+  .promo-left p { color: rgba(255,255,255,0.7); margin-top: 0.8rem; font-size: 1rem; }
+  .promo-right { display: flex; flex-direction: column; align-items: flex-end; gap: 1rem; }
+  .promo-big { font-family: 'Bebas Neue', sans-serif; font-size: 6rem; color: var(--sun); line-height: 1; }
+  .promo-code {
+    background: rgba(255,255,255,0.1);
+    border: 1.5px dashed rgba(255,255,255,0.4);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+  }
+
+  /* WHY US */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  .why-card {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    border-radius: 20px;
+    background: white;
+    border: 1.5px solid rgba(0,0,0,0.06);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .why-card:hover { border-color: var(--sun); transform: translateY(-5px); }
+  .why-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .why-card h4 { font-weight: 700; margin-bottom: 0.5rem; }
+  .why-card p { font-size: 0.85rem; color: #777; line-height: 1.6; }
+
+  /* FOOTER */
+  footer {
+    background: var(--sky);
+    color: white;
+    padding: 4rem 5rem 2rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 2px; margin-bottom: 1rem; }
+  .footer-logo span { color: var(--sun); }
+  .footer-col p { font-size: 0.85rem; color: rgba(255,255,255,0.6); line-height: 1.7; }
+  .footer-col h5 { font-weight: 700; margin-bottom: 1rem; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; color: var(--warm); }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.6rem; }
+  .footer-col ul li a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: white; }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+  }
+  .social-links { display: flex; gap: 0.8rem; }
+  .social-link {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    cursor: none;
+    transition: background 0.2s;
+    text-decoration: none;
+    color: white;
+  }
+  .social-link:hover { background: var(--sun); }
+
+  /* WHATSAPP BUTTON */
+  .whatsapp-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #25D366;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.9rem 1.5rem;
+    border-radius: 100px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    z-index: 400;
+    box-shadow: 0 8px 30px rgba(37,211,102,0.45);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+    animation: waPop 1s 1.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .whatsapp-btn:hover {
+    transform: scale(1.08) translateY(-3px);
+    box-shadow: 0 14px 40px rgba(37,211,102,0.55);
+  }
+  .whatsapp-btn svg { flex-shrink: 0; }
+  @keyframes waPop {
+    from { opacity: 0; transform: scale(0.5) translateY(40px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* CART TOAST */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--sky);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    z-index: 500;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast span { color: var(--mint); font-size: 1.2rem; }
+
+  /* CART COUNT */
+  .cart-count {
+    position: absolute;
+    top: -6px; right: -8px;
+    background: var(--mint);
+    color: var(--sky);
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    font-size: 0.65rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+  }
+  .cart-wrapper { position: relative; }
+
+  /* SCROLL REVEAL */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media(max-width:900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    nav ul { display: none; }
+    .categories-grid { grid-template-columns: 1fr; }
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+    .section { padding: 4rem 1.5rem; }
+    .promo { margin: 0 1.5rem; flex-direction: column; gap: 2rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    nav { padding: 1rem 1.5rem; }
+    .hero-left { padding: 5rem 1.5rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Sun<span>Drop</span></div>
+  <ul>
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#offers">Offers</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="cart-wrapper">
+    <button class="nav-cart" id="cartBtn">🛒 Cart</button>
+    <div class="cart-count" id="cartCount">0</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag"><div class="dot"></div> Summer 2026 Collection</div>
+    <h1>Style Your <span class="highlight">Summer</span> Vibe</h1>
+    <p>Premium caps, trendy accessories aur stylish shoes — sab kuch ek jagah. Fast delivery, best prices.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">Shop Now</a>
+      <a href="#categories" class="btn-outline">Explore All</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Products</div>
+      </div>
+      <div>
+        <div class="stat-num">4.8★</div>
+        <div class="stat-label">Rating</div>
+      </div>
+      <div>
+        <div class="stat-num">10K+</div>
+        <div class="stat-label">Happy Customers</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-emoji-grid">
+      <div class="product-card-hero">
+        <span class="emoji">🧢</span>
+        <h3>Premium Caps</h3>
+        <div class="price">₹399</div>
+      </div>
+      <div class="product-card-hero">
+        <span class="emoji">🕶️</span>
+        <h3>Sunglasses</h3>
+        <div class="price">₹599</div>
+      </div>
+      <div class="product-card-hero">
+        <span class="emoji">👟</span>
+        <h3>Sneakers</h3>
+        <div class="price">₹1299</div>
+      </div>
+      <div class="product-card-hero">
+        <span class="emoji">👜</span>
+        <h3>Bags</h3>
+        <div class="price">₹799</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marquee">
+    <div class="marquee-item">🧢 SUMMER CAPS <span class="dot">✦</span></div>
+    <div class="marquee-item">🕶️ STYLISH SUNGLASSES <span class="dot">✦</span></div>
+    <div class="marquee-item">👟 TRENDY SHOES <span class="dot">✦</span></div>
+    <div class="marquee-item">🎒 COOL BAGS <span class="dot">✦</span></div>
+    <div class="marquee-item">⌚ ACCESSORIES <span class="dot">✦</span></div>
+    <div class="marquee-item">🔥 HOT DEALS <span class="dot">✦</span></div>
+    <div class="marquee-item">🧢 SUMMER CAPS <span class="dot">✦</span></div>
+    <div class="marquee-item">🕶️ STYLISH SUNGLASSES <span class="dot">✦</span></div>
+    <div class="marquee-item">👟 TRENDY SHOES <span class="dot">✦</span></div>
+    <div class="marquee-item">🎒 COOL BAGS <span class="dot">✦</span></div>
+    <div class="marquee-item">⌚ ACCESSORIES <span class="dot">✦</span></div>
+    <div class="marquee-item">🔥 HOT DEALS <span class="dot">✦</span></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section" id="categories">
+  <div class="section-label reveal">Shop By Category</div>
+  <div class="section-title reveal">What Are You<br>Looking For?</div>
+  <div class="categories-grid reveal">
+    <div class="cat-card caps">
+      <div class="cat-emoji">🧢</div>
+      <div class="cat-arrow">→</div>
+      <div class="cat-info">
+        <h3>Caps & Hats</h3>
+        <p>50+ styles available</p>
+      </div>
+    </div>
+    <div class="cat-card accessories">
+      <div class="cat-emoji">🕶️</div>
+      <div class="cat-arrow">→</div>
+      <div class="cat-info">
+        <h3>Accessories</h3>
+        <p>Sun protection & style</p>
+      </div>
+    </div>
+    <div class="cat-card shoes">
+      <div class="cat-emoji">👟</div>
+      <div class="cat-arrow">→</div>
+      <div class="cat-info">
+        <h3>Shoes</h3>
+        <p>Walk in style</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section products-section" id="products">
+  <div class="section-label reveal">Featured Products</div>
+  <div class="section-title reveal">Bestsellers This<br>Season</div>
+  <div class="products-grid reveal">
+
+    <div class="product-card">
+      <div class="product-img bg1"><span class="badge">HOT</span>🧢</div>
+      <div class="product-body">
+        <h4>USA Originals Cap</h4>
+        <p class="sub">Maroon • Adjustable</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="old">₹799</span>₹499</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img bg2"><span class="badge new">NEW</span>🕶️</div>
+      <div class="product-body">
+        <h4>Retro Sunglasses</h4>
+        <p class="sub">Black • UV Protection</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="old">₹899</span>₹599</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img bg3">👟</div>
+      <div class="product-body">
+        <h4>CloudRun Sneakers</h4>
+        <p class="sub">White/Blue • Sizes 6-11</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="old">₹1999</span>₹1299</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img bg4"><span class="badge">SALE</span>🎒</div>
+      <div class="product-body">
+        <h4>Summer Backpack</h4>
+        <p class="sub">Beige • Waterproof</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="old">₹1299</span>₹849</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img bg5"><span class="badge new">NEW</span>🧢</div>
+      <div class="product-body">
+        <h4>Streetwear Snapback</h4>
+        <p class="sub">Navy Blue • Flat Brim</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="old">₹699</span>₹449</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img bg6">🩴</div>
+      <div class="product-body">
+        <h4>Beach Slippers</h4>
+        <p class="sub">Brown • Soft Foam</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="old">₹499</span>₹299</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img bg7"><span class="badge">HOT</span>⌚</div>
+      <div class="product-body">
+        <h4>Sport Watch Band</h4>
+        <p class="sub">Black • Silicone</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="old">₹399</span>₹249</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img bg8">👒</div>
+      <div class="product-body">
+        <h4>Wide Brim Hat</h4>
+        <p class="sub">Tan • Sun Protection</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="old">₹799</span>₹549</div>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROMO BANNER -->
+<div class="promo reveal" id="offers">
+  <div class="promo-left">
+    <h2>Summer Sale<br><span>Is Live Now!</span></h2>
+    <p>Pehle order par flat discount. Limited time offer!</p>
+    <br>
+    <a href="#products" class="btn-primary">Grab The Deal</a>
+  </div>
+  <div class="promo-right">
+    <div class="promo-big">30% OFF</div>
+    <div class="promo-code">🏷️ Code: SUMMER30</div>
+  </div>
+</div>
+<br><br>
+
+<!-- WHY US -->
+<section class="section">
+  <div class="section-label reveal">Why Choose Us</div>
+  <div class="section-title reveal">We Keep It<br>Simple & Honest</div>
+  <div class="why-grid reveal">
+    <div class="why-card">
+      <div class="why-icon">🚀</div>
+      <h4>Fast Delivery</h4>
+      <p>2-4 days delivery across India. Express option available.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">✅</div>
+      <h4>Quality Assured</h4>
+      <p>Every product is checked before dispatch. No compromise.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🔄</div>
+      <h4>Easy Returns</h4>
+      <p>7-day hassle-free return policy. No questions asked.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💬</div>
+      <h4>24/7 Support</h4>
+      <p>WhatsApp support available. We reply within minutes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="footer-logo">Sun<span>Drop</span></div>
+      <p>India ka apna summer fashion store. Caps, accessories aur shoes — sab kuch best price mein.</p>
+      <br>
+      <div class="social-links">
+        <a class="social-link" href="#">📘</a>
+        <a class="social-link" href="#">📸</a>
+        <a class="social-link" href="#">💬</a>
+        <a class="social-link" href="#">🐦</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Shop</h5>
+      <ul>
+        <li><a href="#">Caps & Hats</a></li>
+        <li><a href="#">Sunglasses</a></li>
+        <li><a href="#">Shoes & Sandals</a></li>
+        <li><a href="#">Bags & Backpacks</a></li>
+        <li><a href="#">Accessories</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Help</h5>
+      <ul>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Return Policy</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="#">📞 +91 98765 43210</a></li>
+        <li><a href="#">💬 WhatsApp Us</a></li>
+        <li><a href="#">📧 hello@sundrop.in</a></li>
+        <li><a href="#">📍 India</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SunDrop Store. All rights reserved.</span>
+    <span>Made with ❤️ for Indian summers</span>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span>✓</span> Added to cart!</div>
+
+<!-- WHATSAPP FLOATING BUTTON -->
+<a href="https://wa.me/919876543210?text=Hello!%20I%20want%20to%20order%20from%20SunDrop%20Store%20🛍️" 
+   target="_blank" class="whatsapp-btn" id="waBtn" title="Order on WhatsApp">
+  <svg viewBox="0 0 32 32" width="32" height="32" fill="white">
+    <path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.74 5.494 2.035 7.807L0 32l8.418-2.01A15.93 15.93 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.77-1.852l-.486-.29-5.003 1.196 1.23-4.87-.318-.5A13.267 13.267 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.27-9.804c-.398-.199-2.354-1.162-2.72-1.294-.366-.133-.633-.199-.9.199-.266.398-1.031 1.294-1.265 1.56-.233.266-.466.299-.864.1-.398-.2-1.68-.619-3.2-1.974-1.183-1.054-1.982-2.355-2.215-2.753-.233-.398-.025-.613.175-.811.18-.178.398-.466.597-.699.2-.233.266-.399.399-.665.133-.266.066-.499-.033-.698-.1-.2-.9-2.168-1.232-2.969-.325-.779-.655-.673-.9-.686-.233-.012-.499-.015-.765-.015-.266 0-.698.1-1.064.499-.366.398-1.398 1.366-1.398 3.332 0 1.966 1.432 3.866 1.631 4.132.2.266 2.818 4.303 6.826 6.031.954.412 1.699.658 2.28.842.958.305 1.83.262 2.52.159.769-.115 2.354-.962 2.686-1.89.333-.928.333-1.724.233-1.89-.099-.166-.366-.266-.764-.465z"/>
+  </svg>
+  <span>Order on WhatsApp</span>
+</a>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .product-card, .cat-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+  });
+
+  // Cart
+  let cartCount = 0;
+  const countEl = document.getElementById('cartCount');
+  const toast = document.getElementById('toast');
+
+  function addToCart(btn) {
+    cartCount++;
+    countEl.style.display = 'flex';
+    countEl.textContent = cartCount;
+    toast.classList.add('show');
+    btn.textContent = '✓';
+    btn.style.background = 'var(--mint)';
+    setTimeout(() => {
+      toast.classList.remove('show');
+      btn.textContent = '+';
+      btn.style.background = '';
+    }, 2000);
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if(target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
